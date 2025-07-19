@@ -1,10 +1,10 @@
-package com.example.smartSparen;
+package com.annotations.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SmartSparenApplicationTests {
+class DemoApplicationTests {
 
 	@Test
 	void contextLoads() {
