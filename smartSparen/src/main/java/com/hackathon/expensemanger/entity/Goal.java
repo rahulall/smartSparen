@@ -14,22 +14,23 @@ public class Goal {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GOAL_SEQ")
     @SequenceGenerator(name = "GOAL_SEQ", sequenceName = "GOAL_SEQ", allocationSize = 1)
-    Integer goalId;
+    private Integer goalId;
 
-    String goalType;
+    private String goalType;
 
     @Column(name = "goal_amount", precision = 12, scale = 2)
-    BigDecimal goalAmount;
+    private BigDecimal goalAmount;
 
     @Column(name = "goal_achieved_amount", precision = 12, scale = 2)
-    BigDecimal goalAchievedAmount;
+    private BigDecimal goalAchievedAmount;
 
-    Integer goalPercentAchieved;
+    private Integer goalPercentAchieved;
 
-    Integer goalAccountId;
-    @CreationTimestamp
-    Timestamp createdAt;
+    private Integer goalAccountId;
 
     @CreationTimestamp
-    Timestamp updatedAt;
+    private Timestamp createdAt;
+
+    @CreationTimestamp
+    private Timestamp updatedAt;
 }

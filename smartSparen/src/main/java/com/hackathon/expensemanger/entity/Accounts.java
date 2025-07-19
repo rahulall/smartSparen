@@ -14,20 +14,20 @@ public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNTS_SEQ")
     @SequenceGenerator(name = "ACCOUNTS_SEQ", sequenceName = "ACCOUNTS_SEQ", allocationSize = 1)
-    Integer accountId;
+    private Integer accountId;
 
-    Integer userId;
+    private Integer userId;
 
-    String accountName;
+    private String accountName;
 
-    String accountType;
+    private String accountType;
 
     @Column(name = "balance", precision = 12, scale = 2)
-    BigDecimal balance;
+    private BigDecimal balance;
 
     @CreationTimestamp
-    Timestamp createdAt;
+    private Timestamp createdAt;
 
     @CreationTimestamp
-    Timestamp updatedAt;
+    private Timestamp updatedAt;
 }

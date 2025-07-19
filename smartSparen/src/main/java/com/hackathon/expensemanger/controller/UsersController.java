@@ -21,7 +21,7 @@ public class UsersController {
     private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 
     @Autowired
-    UsersDao usersDao;
+    private UsersDao usersDao;
 
     @PostMapping("/users")
     public HttpResponse insertUsers(@RequestBody Users users) {

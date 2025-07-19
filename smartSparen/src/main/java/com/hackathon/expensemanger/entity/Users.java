@@ -14,17 +14,17 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ")
     @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ", allocationSize = 1)
-    Integer userId;
+    private Integer userId;
 
-    String name;
+    private String name;
 
-    String email;
+    private String email;
 
-    String passwordHash;
-
-    @CreationTimestamp
-    Timestamp createdAt;
+    private String passwordHash;
 
     @CreationTimestamp
-    Timestamp updatedAt;
+    private Timestamp createdAt;
+
+    @CreationTimestamp
+    private Timestamp updatedAt;
 }

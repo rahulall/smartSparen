@@ -20,7 +20,7 @@ public class CategoryController {
     private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
 
     @Autowired
-    CategoryDao categoryDao;
+    private CategoryDao categoryDao;
 
     @PostMapping("/category")
     public HttpResponse insertGoals(@RequestBody Category category) {
