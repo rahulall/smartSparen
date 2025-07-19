@@ -1,4 +1,4 @@
-package com.annotations.demo.entity;
+package com.hackathon.expensemanger.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

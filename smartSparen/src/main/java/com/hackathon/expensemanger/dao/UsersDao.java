@@ -1,6 +1,6 @@
-package com.annotations.demo.dao;
+package com.hackathon.expensemanger.dao;
 
-import com.annotations.demo.entity.Users;
+import com.hackathon.expensemanger.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

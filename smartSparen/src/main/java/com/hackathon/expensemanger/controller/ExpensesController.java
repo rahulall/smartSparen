@@ -1,4 +1,4 @@
-package com.annotations.demo.controller;
+package com.hackathon.expensemanger.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

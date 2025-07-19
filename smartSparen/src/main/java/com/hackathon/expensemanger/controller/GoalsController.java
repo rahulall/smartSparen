@@ -1,8 +1,8 @@
-package com.annotations.demo.controller;
+package com.hackathon.expensemanger.controller;
 
-import com.annotations.demo.dao.GoalDao;
-import com.annotations.demo.entity.Goal;
-import com.annotations.demo.util.HttpResponse;
+import com.hackathon.expensemanger.dao.GoalDao;
+import com.hackathon.expensemanger.entity.Goal;
+import com.hackathon.expensemanger.util.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.annotations.demo.util.Constants.*;
-import static com.annotations.demo.util.Constants.MSG_FOR_FAILED_INSERTION;
+import static com.hackathon.expensemanger.util.Constants.*;
+import static com.hackathon.expensemanger.util.Constants.MSG_FOR_FAILED_INSERTION;
 
 @RestController
 @RequestMapping("/expensemanagement")

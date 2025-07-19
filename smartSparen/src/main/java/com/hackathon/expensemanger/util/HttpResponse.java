@@ -1,4 +1,4 @@
-package com.annotations.demo.util;
+package com.hackathon.expensemanger.util;
 
 import lombok.Data;
 

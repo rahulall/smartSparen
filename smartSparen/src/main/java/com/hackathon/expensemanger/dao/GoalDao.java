@@ -1,6 +1,6 @@
-package com.annotations.demo.dao;
+package com.hackathon.expensemanger.dao;
 
-import com.annotations.demo.entity.Goal;
+import com.hackathon.expensemanger.entity.Goal;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 //@Repository

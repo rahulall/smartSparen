@@ -1,4 +1,4 @@
-package com.annotations.demo.service;
+package com.hackathon.expensemanger.service;
 
 import org.springframework.stereotype.Service;
 
