@@ -189,6 +189,19 @@ CREATE TABLE smart_sparen.goal (
 	
 );
 
+--11. TRANSACTION TABLE
+      CREATE TABLE smart_sparen.transaction (
+          transaction_id SERIAL PRIMARY KEY,
+          transaction_amount NUMERIC(12, 2) NOT NULL,
+          transaction_goal_amount NUMERIC(12, 2) NOT NULL,
+      	transaction_goal_id INTEGER REFERENCES smart_sparen.goal(goal_id) ON DELETE CASCADE,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+
+      CREATE INDEX idx_transaction_id ON smart_sparen.transaction(transaction_id);
+
 --#########################################
 --Populate test data
 --##########################################
@@ -290,6 +303,8 @@ alter table if exists smart_sparen.accounts
 alter table if exists smart_sparen.budget_alerts alter column alert_type set data type varchar(255);
 
 alter table smart_sparen.budget_alerts alter column message set data type varchar(255);
+
+alter table smart_sparen.accounts add column is_consent BOOLEAN DEFAULT FALSE;
 
 COMMIT;
 
