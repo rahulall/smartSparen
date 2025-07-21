@@ -15,7 +15,7 @@ public class Category {
     private Integer categoryId;
 
     private String categoryName;
-
+    //In category we need category_type or category_code
     @CreationTimestamp
     private Timestamp createdAt;
 
