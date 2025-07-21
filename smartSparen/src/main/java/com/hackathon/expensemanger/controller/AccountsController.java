@@ -3,16 +3,21 @@ package com.hackathon.expensemanger.controller;
 import com.hackathon.expensemanger.dao.AccountsDao;
 import com.hackathon.expensemanger.entity.Accounts;
 import com.hackathon.expensemanger.util.HttpResponse;
+import jakarta.persistence.TemporalType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.TemporalField;
+import java.util.Optional;
 
 import static com.hackathon.expensemanger.util.Constants.*;
-import static com.hackathon.expensemanger.util.Constants.MSG_FOR_FAILED_INSERTION;
 
 @RestController
 @RequestMapping("/expensemanagement")
@@ -28,7 +33,42 @@ public class AccountsController {
         HttpResponse<Accounts> httpResponse = new HttpResponse();
         logger.info("Adding Accounts object");
         try {
+            if(accounts.getIsConsent())
+                accounts.setIsConsent(Boolean.TRUE);
             accountsDao.save(accounts);
+            httpResponse.setStatus(SUCCESS);
+            httpResponse.setMessage(MSG_FOR_SUCCESSFUL_INSERTION);
+            httpResponse.setObject(accounts);
+            logger.info("End of method adding accounts");
+        } catch (Exception e) {
+            logger.error("exception occurred while inserting accounts : ", e);
+            httpResponse.setStatus(FAILURE);
+            httpResponse.setMessage(MSG_FOR_FAILED_INSERTION);
+        }
+        return httpResponse;
+    }
+
+    @Modifying
+    @Transactional
+    @PutMapping("/accounts")
+    public HttpResponse updateAccounts(@RequestBody Accounts accounts) {
+        HttpResponse<Accounts> httpResponse = new HttpResponse();
+        logger.info("Adding Accounts object");
+        try {
+            Optional<Accounts> accounts1 = accountsDao.findById(accounts.getAccountId().longValue());
+            if(accounts1.isPresent()) {
+                Accounts updateAccount = accounts1.get();
+                if(accounts.getIsConsent()){
+                    updateAccount.setIsConsent(Boolean.TRUE);
+                }else{
+                    updateAccount.setIsConsent(Boolean.FALSE);
+                }
+                accountsDao.flush();
+                updateAccount.setBalance(accounts.getBalance());
+                updateAccount.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+                updateAccount.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+                accountsDao.saveAndFlush(updateAccount);
+            }
             httpResponse.setStatus(SUCCESS);
             httpResponse.setMessage(MSG_FOR_SUCCESSFUL_INSERTION);
             httpResponse.setObject(accounts);

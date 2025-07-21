@@ -3,6 +3,8 @@ package com.hackathon.expensemanger.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -25,9 +27,12 @@ public class Accounts {
     @Column(name = "balance", precision = 12, scale = 2)
     private BigDecimal balance;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp createdAt;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp updatedAt;
+
+    @Column(name = "is_consent")
+    private Boolean isConsent;
 }
