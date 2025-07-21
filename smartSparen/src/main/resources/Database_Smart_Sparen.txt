@@ -283,4 +283,13 @@ GRANT SELECT, INSERT, UPDATE ON smart_sparen.dashboard_views TO smart_sparen_use
 GRANT SELECT, INSERT, UPDATE ON smart_sparen.ReTagHistory TO smart_sparen_user;
 GRANT USAGE ON SCHEMA smart_sparen TO smart_sparen_user;
 
+-- Need to alter accounts table
+alter table if exists smart_sparen.accounts
+       alter column account_type set data type varchar(255);
+
+alter table if exists smart_sparen.budget_alerts alter column alert_type set data type varchar(255);
+
+alter table smart_sparen.budget_alerts alter column message set data type varchar(255);
+
 COMMIT;
+
