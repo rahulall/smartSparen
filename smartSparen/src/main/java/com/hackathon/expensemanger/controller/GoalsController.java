@@ -8,32 +8,31 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.hackathon.expensemanger.util.Constants.*;
 import static com.hackathon.expensemanger.util.Constants.MSG_FOR_FAILED_INSERTION;
 
 @RestController
-@RequestMapping("/expensemanagement")
+@RequestMapping("/micro-saving-goal")
 public class GoalsController {
     private static final Logger logger = LoggerFactory.getLogger(GoalsController.class);
 
     @Autowired
     private GoalDao goalDao;
 
-    @GetMapping("/fetchGoals")
-    public List<Goal> fetchGoals(){
-        HttpResponse<Goal> httpResponse = new HttpResponse<>();
+    @PostMapping("/fetchGoals")
+    public List<Goal> fetchGoal(@RequestBody Goal goal){
         logger.info("Updating Goals object");
-        List<Goal> goals = null;
+        Optional<Goal> goals = null;
         try {
-            goals = goalDao.findAll();
+            goals = goalDao.findById(goal.getUserId());
             logger.info("End of method fetching goals");
         } catch (Exception e) {
             logger.error("exception occurred while updating goals : ", e);
         }
-        return goals;
+        return goals != null ? goals.stream().toList() : null;
     }
     @PostMapping("/insertGoal")
     public HttpResponse<Goal> insertGoal(@RequestBody Goal goal) {
@@ -54,49 +53,38 @@ public class GoalsController {
     }
 
     @PostMapping("/updateGoal")
-    public Goal updateGoal(@RequestBody Goal goal) {
+    public HttpResponse<Goal> updateGoal(@RequestBody com.hackathon.expensemanger.bean.Goal goal) {
         HttpResponse<Goal> httpResponse = new HttpResponse<>();
         logger.info("Updating Goals object");
-        Goal goalObj = new Goal();
+        com.hackathon.expensemanger.entity.Goal goalObj = new com.hackathon.expensemanger.entity.Goal();
         try {
             goalObj = goalDao.findById(goal.getGoalId()).get();
-            goalObj.setGoalId(goal.getGoalId());
-            goalObj.setGoalAccountId(goal.getGoalAccountId());
-            goalObj.setGoalAmount(goal.getGoalAmount());
-            goalObj.setGoalType(goal.getGoalType());
-            goalObj.setGoalPercentAchieved(goal.getGoalPercentAchieved());
-            goalObj.setGoalAchievedAmount(goal.getGoalAchievedAmount());
+            goalObj.setAccountId(goal.getAccountId());
+            goalObj.setUserId(goal.getUserId());
+            goalObj.setCategoryId(goal.getCategoryId());
+            goalObj.setGoalName(goal.getGoalName());
+            goalObj.setTargetAmount(goal.getTargetAmount());
+            goalObj.setGoalStartDate(goal.getGoalStartDate());
+            goalObj.setGoalEndDate(goal.getGoalEndDate());
+            goalObj.setGoalStatus(goal.getGoalStatus());
+            goalObj.setFrequencyOfContribution(goal.getFrequencyOfContribution());
+            goalObj.setContributionStyle(goal.getContributionStyle());
+            goalObj.setDayOfWeek(goal.getDayOfWeek());
+            goalObj.setDateOfMonth(goal.getDateOfMonth());
+            goalObj.setContributionAmount(goal.getContributionAmount());
+            goalObj.setRoundToNextEuro(goal.getRoundToNextEuro());
+            goalObj.setPercentageOfExpense(goal.getPercentageOfExpense());
+            //goal.setModifiedAt();
             goalDao.save(goalObj);
             httpResponse.setStatus(SUCCESS);
             httpResponse.setMessage(MSG_FOR_SUCCESSFUL_UPDATE);
-            httpResponse.setObject(goal);
+            httpResponse.setObject(goalObj);
             logger.info("End of method updating goals");
         } catch (Exception e) {
             logger.error("exception occurred while updating goals : ", e);
             httpResponse.setStatus(FAILURE);
             httpResponse.setMessage(MSG_FOR_FAILED_UPDATE);
         }
-        return goalObj;
-    }
-
-    @PostMapping("/removeGoal")
-    public HttpResponse<Goal> removeGoal(@RequestBody Goal goal) {
-        HttpResponse<Goal> httpResponse = new HttpResponse<>();
-        logger.info("Removing Goals object");
-        Goal goalObj = new Goal();
-        try {
-            goalObj = goalDao.findById(goal.getGoalId()).get();
-            goalDao.delete(goalObj);
-            httpResponse.setStatus(SUCCESS);
-            httpResponse.setMessage("Goal removed succefully.");
-            httpResponse.setObject(goal);
-            logger.info("End of method removing goals");
-        } catch (Exception e) {
-            logger.error("exception occurred while removing goals : ", e);
-            httpResponse.setStatus(FAILURE);
-            httpResponse.setMessage("Goal removal process failed.");
-        }
         return httpResponse;
     }
-
 }
