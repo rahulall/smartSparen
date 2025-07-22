@@ -15,7 +15,7 @@ import static com.hackathon.expensemanger.util.Constants.*;
 import static com.hackathon.expensemanger.util.Constants.MSG_FOR_FAILED_INSERTION;
 
 @RestController
-@RequestMapping("/expensemanagement")
+@RequestMapping("/micro-saving-goal")
 public class GoalsController {
     private static final Logger logger = LoggerFactory.getLogger(GoalsController.class);
 
@@ -25,7 +25,7 @@ public class GoalsController {
     @GetMapping("/fetchGoals")
     public List<Goal> fetchGoals(){
         HttpResponse<Goal> httpResponse = new HttpResponse<>();
-        logger.info("Updating Goals object");
+        logger.info("Retrieving Goals object");
         List<Goal> goals = null;
         try {
             goals = goalDao.findAll();

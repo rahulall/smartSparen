@@ -306,5 +306,9 @@ alter table smart_sparen.budget_alerts alter column message set data type varcha
 
 alter table smart_sparen.accounts add column is_consent BOOLEAN DEFAULT FALSE;
 
+
+alter table if exists smart_sparen.goal
+       add column is_round_up BOOLEAN default FALSE;
+
 COMMIT;
 

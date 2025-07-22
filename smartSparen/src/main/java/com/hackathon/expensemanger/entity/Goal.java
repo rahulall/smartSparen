@@ -39,4 +39,7 @@ public class Goal {
 
     @CreationTimestamp
     private Timestamp updatedAt;
+
+    @Column(name = "is_round_up")
+    private Boolean isRoundUp;
 }

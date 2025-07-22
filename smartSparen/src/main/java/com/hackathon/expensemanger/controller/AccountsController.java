@@ -53,14 +53,16 @@ public class AccountsController {
     @PutMapping("/accounts")
     public HttpResponse updateAccounts(@RequestBody Accounts accounts) {
         HttpResponse<Accounts> httpResponse = new HttpResponse();
-        logger.info("Adding Accounts object");
+        logger.info("Updating Accounts object");
         try {
             Optional<Accounts> accounts1 = accountsDao.findById(accounts.getAccountId().longValue());
             if(accounts1.isPresent()) {
                 Accounts updateAccount = accounts1.get();
                 if(accounts.getIsConsent()){
+                    logger.info("Consent update TRUE");
                     updateAccount.setIsConsent(Boolean.TRUE);
                 }else{
+                    logger.info("Consent update FALSE");
                     updateAccount.setIsConsent(Boolean.FALSE);
                 }
                 accountsDao.flush();
@@ -72,7 +74,7 @@ public class AccountsController {
             httpResponse.setStatus(SUCCESS);
             httpResponse.setMessage(MSG_FOR_SUCCESSFUL_INSERTION);
             httpResponse.setObject(accounts);
-            logger.info("End of method adding accounts");
+            logger.info("End of method updating accounts");
         } catch (Exception e) {
             logger.error("exception occurred while inserting accounts : ", e);
             httpResponse.setStatus(FAILURE);
