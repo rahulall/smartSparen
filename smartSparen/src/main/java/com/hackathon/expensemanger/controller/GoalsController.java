@@ -61,11 +61,9 @@ public class GoalsController {
         try {
             goalObj = goalDao.findById(goal.getGoalId()).get();
             goalObj.setGoalId(goal.getGoalId());
-            goalObj.setGoalAccountId(goal.getGoalAccountId());
-            goalObj.setGoalAmount(goal.getGoalAmount());
-            goalObj.setGoalType(goal.getGoalType());
-            goalObj.setGoalPercentAchieved(goal.getGoalPercentAchieved());
-            goalObj.setGoalAchievedAmount(goal.getGoalAchievedAmount());
+            goalObj.setGoalName(goal.getGoalName());
+            goalObj.setGoalStatus(goal.getGoalStatus());
+            goalObj.setGoalEndDate(goal.getGoalEndDate());
             goalDao.save(goalObj);
             httpResponse.setStatus(SUCCESS);
             httpResponse.setMessage(MSG_FOR_SUCCESSFUL_UPDATE);

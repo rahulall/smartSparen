@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -22,24 +23,43 @@ public class Goal {
     @SequenceGenerator(name = "GOAL_SEQ", sequenceName = "GOAL_SEQ", allocationSize = 1)
     private Integer goalId;
 
-    private String goalType;
+    private Integer userId;
 
-    @Column(name = "goal_amount", precision = 12, scale = 2)
-    private BigDecimal goalAmount;
+    private Integer accountId;
 
-    @Column(name = "goal_achieved_amount", precision = 12, scale = 2)
-    private BigDecimal goalAchievedAmount;
+    private Integer categoryId;
 
-    private Integer goalPercentAchieved;
+    private String goalName;
 
-    private Integer goalAccountId;
+    @Column(name = "target_amount", precision = 12, scale = 2)
+    private BigDecimal targetAmount;
+
+    private Date goalStartDate;
+
+    private Date goalEndDate;
+
+    private String goalStatus;
+
+    private String frequencyOfContribution;
+
+    private String contributionStyle;
+
+    private String dayOfWeek;
+
+    private Integer dateOfMonth;
+
+    @Column(name = "contribution_amount", precision = 12, scale = 2)
+    private BigDecimal contributionAmount;
+
+    @Column(name = "round_to_next_euro", precision = 12, scale = 2)
+    private BigDecimal roundToNextEuro;
+
+    @Column(name = "percentage_of_expense", precision = 12, scale = 2)
+    private BigDecimal percentageOfExpense;
+
+    private String categoryOfExpense;
 
     @CreationTimestamp
     private Timestamp createdAt;
 
-    @CreationTimestamp
-    private Timestamp updatedAt;
-
-    @Column(name = "is_round_up")
-    private Boolean isRoundUp;
 }
