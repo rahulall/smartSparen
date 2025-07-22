@@ -271,7 +271,7 @@ alter table smart_sparen.budget_alerts alter column message set data type varcha
 alter table smart_sparen.accounts add column is_consent BOOLEAN DEFAULT FALSE;
 
 
-alter table if exists smart_sparen.goal
+alter table if exists smart_sparen.goal_transaction
        add column is_round_up BOOLEAN default FALSE;
 
 
@@ -285,10 +285,10 @@ CREATE TABLE smart_sparen.goal (
     target_amount NUMERIC(15, 2),
     goal_start_date DATE,
     goal_end_date DATE,
-    goal_status VARCHAR(50),                -- e.g., 'active', 'completed', 'paused'
-    frequency_of_contribution VARCHAR(50), -- e.g., 'weekly', 'monthly'
-    contribution_style VARCHAR(50),        -- e.g., 'fixed', 'percentage'
-    day_of_week VARCHAR(20),               -- e.g., 'Monday', NULL if not applicable
+    goal_status VARCHAR(255),                -- e.g., 'active', 'completed', 'paused'
+    frequency_of_contribution VARCHAR(255), -- e.g., 'weekly', 'monthly'
+    contribution_style VARCHAR(255),        -- e.g., 'fixed', 'percentage'
+    day_of_week VARCHAR(255),               -- e.g., 'Monday', NULL if not applicable
     date_of_month INT,                     -- 1-31, NULL if not applicable
     contribution_amount NUMERIC(15, 2),
     round_to_next_euro NUMERIC(15, 2),    -- amount to round contribution up to next euro

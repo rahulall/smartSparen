@@ -31,7 +31,7 @@ public class Goal {
 
     private String goalName;
 
-    @Column(name = "target_amount", precision = 12, scale = 2)
+    @Column(name = "target_amount", precision = 15, scale = 2)
     private BigDecimal targetAmount;
 
     private Date goalStartDate;
@@ -48,18 +48,18 @@ public class Goal {
 
     private Integer dateOfMonth;
 
-    @Column(name = "contribution_amount", precision = 12, scale = 2)
+    @Column(name = "contribution_amount", precision = 15, scale = 2)
     private BigDecimal contributionAmount;
 
-    @Column(name = "round_to_next_euro", precision = 12, scale = 2)
+    @Column(name = "round_to_next_euro", precision = 15, scale = 2)
     private BigDecimal roundToNextEuro;
 
-    @Column(name = "percentage_of_expense", precision = 12, scale = 2)
+    @Column(name = "percentage_of_expense", precision = 5, scale = 2)
     private BigDecimal percentageOfExpense;
 
     private String categoryOfExpense;
 
     @CreationTimestamp
-    private Timestamp createdAt;
+    private Timestamp createdDate;
 
 }
