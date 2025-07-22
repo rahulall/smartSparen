@@ -164,43 +164,7 @@ CREATE TABLE smart_sparen.dashboard_views (
 CREATE INDEX idx_dashboard_views_user_id ON smart_sparen.dashboard_views(user_id);
 
 
--- 9. ReTagHistory table
-CREATE TABLE smart_sparen.ReTagHistory (
-    retag_id SERIAL PRIMARY KEY,
-    expense_id INT REFERENCES smart_sparen.expenses(expense_id) ON DELETE CASCADE,
-    previous_category_id INT REFERENCES smart_sparen.category(category_id),
-    new_category_id INT REFERENCES smart_sparen.category(category_id),
-    changed_by_user_id INT REFERENCES smart_sparen.Users(user_id),
-    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-
---10. Goal table 
-CREATE TABLE smart_sparen.goal (
-    goal_id SERIAL PRIMARY KEY,
-    goal_type VARCHAR(255),
-    goal_amount NUMERIC(12, 2) NOT NULL,
-    goal_achieved_amount NUMERIC(12, 2) NOT NULL,
-	goal_percent_achieved INTEGER NOT NULL,
-	goal_account_id INTEGER NOT NULL REFERENCES smart_sparen.accounts(account_id) ON DELETE CASCADE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	
-);
-
---11. TRANSACTION TABLE
-      CREATE TABLE smart_sparen.transaction (
-          transaction_id SERIAL PRIMARY KEY,
-          transaction_amount NUMERIC(12, 2) NOT NULL,
-          transaction_goal_amount NUMERIC(12, 2) NOT NULL,
-      	transaction_goal_id INTEGER REFERENCES smart_sparen.goal(goal_id) ON DELETE CASCADE,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-
-
-      CREATE INDEX idx_transaction_id ON smart_sparen.transaction(transaction_id);
+CREATE INDEX idx_transaction_id ON smart_sparen.transaction(transaction_id);
 
 --#########################################
 --Populate test data
@@ -305,6 +269,100 @@ alter table if exists smart_sparen.budget_alerts alter column alert_type set dat
 alter table smart_sparen.budget_alerts alter column message set data type varchar(255);
 
 alter table smart_sparen.accounts add column is_consent BOOLEAN DEFAULT FALSE;
+
+
+alter table if exists smart_sparen.goal
+       add column is_round_up BOOLEAN default FALSE;
+
+
+---Changes by 22ndJuly
+CREATE TABLE smart_sparen.goal (
+    goal_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    account_id INT NOT NULL,
+    category_id INT NOT NULL,
+    goal_name VARCHAR(255) NOT NULL,
+    target_amount NUMERIC(15, 2),
+    goal_start_date DATE,
+    goal_end_date DATE,
+    goal_status VARCHAR(50),                -- e.g., 'active', 'completed', 'paused'
+    frequency_of_contribution VARCHAR(50), -- e.g., 'weekly', 'monthly'
+    contribution_style VARCHAR(50),        -- e.g., 'fixed', 'percentage'
+    day_of_week VARCHAR(20),               -- e.g., 'Monday', NULL if not applicable
+    date_of_month INT,                     -- 1-31, NULL if not applicable
+    contribution_amount NUMERIC(15, 2),
+    round_to_next_euro NUMERIC(15, 2),    -- amount to round contribution up to next euro
+    percentage_of_expense NUMERIC(5, 2),  -- percentage like 12.34
+    category_of_expense VARCHAR(255),
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+ CONSTRAINT fk_goal_user FOREIGN KEY (user_id)
+        REFERENCES smart_sparen.users (user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_goal_account FOREIGN KEY (account_id)
+        REFERENCES smart_sparen.accounts (account_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_goal_category FOREIGN KEY (category_id)
+        REFERENCES smart_sparen.category (category_id)
+        ON DELETE CASCADE
+);
+
+
+ CREATE TABLE smart_sparen.goal_transaction (
+    goal_transaction_id SERIAL PRIMARY KEY,
+    goal_id INT NOT NULL,
+    transaction_amount NUMERIC(15, 2) NOT NULL,
+    transaction_goal_amount NUMERIC(15, 2) NOT NULL,
+    created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_goal_transaction_goal FOREIGN KEY (goal_id)
+        REFERENCES smart_sparen.goal (goal_id)
+        ON DELETE CASCADE
+);
+
+ CREATE INDEX idx_goal_transaction ON smart_sparen.goal_transaction(goal_transaction_id);
+
+
+GRANT SELECT, INSERT, UPDATE ON smart_sparen.goal TO smart_sparen_user;
+GRANT SELECT, INSERT, UPDATE ON smart_sparen.goal_transaction TO smart_sparen_user;
+
+INSERT INTO smart_sparen.expenses (user_id, account_id, category_id, amount, description, transaction_date, is_manual_tag,currency ,merchant )
+VALUES
+  (1, 1, 2, 100, 'Grocery shopping at Walmart', '2025-06-01', FALSE ,'EURO' , '001'),
+  (1, 2, 3, 30.00, 'Dinner at Italian restaurant', '2025-06-03', FALSE,'EURO','003'),
+  (1, 1, 5, 20.00, 'Electricity bill', '2025-06-05', TRUE,'EURO','004'),
+  (2, 3, 8, 70.00, 'Cinema tickets', '2025-06-02', FALSE,'EURO','540'),
+  (1, 1, 2, 130.50, 'Grocery shopping at Walmart', '2025-05-01', FALSE ,'EURO' , '001'),
+  (1, 2, 3, 40.00, 'Dinner at Italian restaurant', '2025-05-03', FALSE,'EURO','003'),
+  (1, 1, 5, 60.00, 'Electricity bill', '2025-05-05', TRUE,'EURO','004'),
+  (2, 3, 8, 10.00, 'Cinema tickets', '2025-05-02', FALSE,'EURO','540');
+
+-- Select 2 months data category wise
+SELECT
+    e.user_id,
+    c.category_name,
+    EXTRACT(YEAR FROM e.transaction_date) AS year,
+    TO_CHAR(e.transaction_date, 'Month') AS month,
+    SUM(e.amount) AS total_expense
+FROM
+    smart_sparen.expenses e
+JOIN
+    smart_sparen.category c ON e.category_id = c.category_id
+WHERE
+    e.transaction_date >= DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '1 month'
+    AND e.transaction_date < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'
+GROUP BY
+    e.user_id,
+    c.category_name,
+    year,
+    month
+ORDER BY
+    e.user_id,
+    year,
+    month,
+    c.category_name;
 
 COMMIT;
 
