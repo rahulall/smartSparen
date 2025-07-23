@@ -364,5 +364,12 @@ ORDER BY
     month,
     c.category_name;
 
+-- Insert data to Goal table
+INSERT INTO smart_sparen.goal (user_id, account_id, category_id, goal_name, target_amount, goal_status,
+frequency_of_contribution,
+contribution_amount)
+VALUES
+  (1, 1, 2, 'Purchase of Car', 2500000.00, 'ACTIVE' ,'MONTHLY' ,10000.00);
+
 COMMIT;
 
