@@ -9,4 +9,6 @@ public class Constants {
     public static String MSG_FOR_FAILED_INSERTION = "Object insertion failed";
     public static String MSG_FOR_SUCCESSFUL_UPDATE = "Object updated successfully";
     public static String MSG_FOR_FAILED_UPDATE = "Object update failed";
+    public static String MSG_FOR_SUCCESSFUL_RETRIEVAL = "Object retrieved successfully";
+
 }

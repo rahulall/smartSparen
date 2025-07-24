@@ -52,7 +52,7 @@ public class Goal {
     private BigDecimal contributionAmount;
     @Column(name = "round_to_next_euro", precision = 15, scale = 2)
     private BigDecimal roundToNextEuro;
-    @Column(name = "percentage_of_expense", precision = 15, scale = 2)
+    @Column(name = "percentage_of_expense", precision = 5, scale = 2)
     private BigDecimal percentageOfExpense;
     @Column(name = "category_of_expense")
     private String categoryOfExpense;
@@ -62,5 +62,4 @@ public class Goal {
     @UpdateTimestamp
     @Column(name= "modified_date")
     private Timestamp modifiedAt;
-
 }

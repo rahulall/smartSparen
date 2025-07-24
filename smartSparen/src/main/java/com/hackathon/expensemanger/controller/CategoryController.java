@@ -6,10 +6,9 @@ import com.hackathon.expensemanger.util.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.hackathon.expensemanger.util.Constants.*;
 import static com.hackathon.expensemanger.util.Constants.MSG_FOR_FAILED_INSERTION;
@@ -37,6 +36,16 @@ public class CategoryController {
             httpResponse.setStatus(FAILURE);
             httpResponse.setMessage(MSG_FOR_FAILED_INSERTION);
         }
+        return httpResponse;
+    }
+
+    @GetMapping("/getCategoryWiseMothlyDetails")
+    public HttpResponse getCategoryWiseDetails() {
+        HttpResponse httpResponse = new HttpResponse();
+        List resList = categoryDao.findByCategoryMonthlyData();
+        httpResponse.setStatus(SUCCESS);
+        httpResponse.setMessage(MSG_FOR_SUCCESSFUL_RETRIEVAL);
+        httpResponse.setObject(resList);
         return httpResponse;
     }
 }
