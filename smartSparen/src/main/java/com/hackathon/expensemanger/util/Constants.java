@@ -11,4 +11,6 @@ public class Constants {
     public static String MSG_FOR_FAILED_UPDATE = "Object update failed";
     public static String MSG_FOR_SUCCESSFUL_RETRIEVAL = "Object retrieved successfully";
 
+    public static String MSG_FOR_SUCCESSFUL_GET_CATEGORY_WISE_RETRIEVAL = "Object retrieved successfully";
+    public static String MSG_FOR_FAILURE_GET_CATEGORY_WISE_RETRIEVAL = "Object retrieval failed";
 }
