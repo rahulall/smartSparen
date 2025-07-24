@@ -1,16 +1,16 @@
 package com.hackathon.expensemanger.controller;
 
 import com.hackathon.expensemanger.dao.ExpensesDao;
+import com.hackathon.expensemanger.dto.CategoryExpenseDto;
 import com.hackathon.expensemanger.entity.Expenses;
-import com.hackathon.expensemanger.entity.Goal;
 import com.hackathon.expensemanger.util.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.hackathon.expensemanger.util.Constants.*;
 import static com.hackathon.expensemanger.util.Constants.MSG_FOR_FAILED_INSERTION;
@@ -41,4 +41,21 @@ public class ExpensesController {
         }
         return httpResponse;
     }
+
+    @GetMapping("/getexpenses/{category}")
+    public HttpResponse getExpenses(@PathVariable String category){
+        HttpResponse<List<CategoryExpenseDto>> httpResponse = new HttpResponse();
+        if(!StringUtils.isEmpty(category)){
+            List<CategoryExpenseDto> categoryExpenseDto = expensesDao.findDataCategorywise(category);
+            expensesDao.findDataCategorywise(category);
+            httpResponse.setMessage(SUCCESS);
+            httpResponse.setStatus(MSG_FOR_SUCCESSFUL_GET_CATEGORY_WISE_RETRIEVAL);
+            httpResponse.setObject(categoryExpenseDto);
+        }else {
+            httpResponse.setMessage(FAILURE);
+            httpResponse.setStatus(MSG_FOR_FAILURE_GET_CATEGORY_WISE_RETRIEVAL);
+        }
+        return httpResponse;
+    }
+
 }
