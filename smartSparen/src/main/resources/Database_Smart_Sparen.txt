@@ -36,6 +36,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE ss_db_writer IN SCHEMA smart_sparen GRANT SELE
 ALTER SCHEMA smart_sparen OWNER TO smart_sparen_user;
 
 
+
 --##########################################
 --Actual tables creation
 --#########################################
@@ -366,3 +367,5 @@ ORDER BY
 
 COMMIT;
 
+alter table if exists smart_sparen.goal
+       add column modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
