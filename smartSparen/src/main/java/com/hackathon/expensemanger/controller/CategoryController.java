@@ -94,4 +94,10 @@ public class CategoryController {
         httpResponse.setObject(chartResponseObject);
         return httpResponse;
     }
+
+    @GetMapping("/getCategory")
+    public Integer getCategory(@RequestParam String categoryName) {
+        return categoryDao.findByCategoryName(categoryName);
+    }
+
 }

@@ -12,8 +12,8 @@ import java.sql.Timestamp;
 @Entity
 public class Expenses {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXPENSES_SEQ")
-    @SequenceGenerator(name = "EXPENSES_SEQ", sequenceName = "EXPENSES_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXPENSES_GEN")
+    @SequenceGenerator(name = "EXPENSES_GEN", sequenceName = "EXPENSES_SEQ", allocationSize = 1)
     private Integer expenseId;
 
     private Integer userId;
