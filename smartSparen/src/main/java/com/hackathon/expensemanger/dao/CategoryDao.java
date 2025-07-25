@@ -1,5 +1,6 @@
 package com.hackathon.expensemanger.dao;
 
+import com.hackathon.expensemanger.dto.CategoryExpenseDto;
 import com.hackathon.expensemanger.entity.Category;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -47,6 +48,11 @@ public interface CategoryDao extends JpaRepository<Category, Long> {
             "DATE_TRUNC('month', e.transaction_date) "+
             ") AS sub ORDER BY user_id,category_name, month_start", nativeQuery = true)
     public List findByCategoryMonthlyData();
+
+    @Query(name = "Category.findByCategoryMonthlyData", value ="SELECT c.category_id " +
+            "from smart_sparen.Category c " +
+            "where c.category_name =:category", nativeQuery = true)
+    public Integer findCategoryIdByCategory(String category);
 
     @Query(name = "Category.findByCategoryName", value = "Select * from Category c where c.category_name = :categoryName" , nativeQuery = true)
     public int findByCategoryName(String categoryName);

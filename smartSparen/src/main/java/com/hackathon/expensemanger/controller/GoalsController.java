@@ -94,7 +94,7 @@ public class GoalsController {
             httpResponse.setStatus(FAILURE);
             httpResponse.setMessage(MSG_FOR_FAILED_INSERTION);
         }
-      //  return httpResponse;
+        //  return httpResponse;
     }
     private Goal populateGoalDto(GoalVO goalVO){
         Goal goal = new Goal();
@@ -112,8 +112,8 @@ public class GoalsController {
         goal.setDateOfMonth(goalVO.getDateOfMonth());
         goal.setContributionAmount(goalVO.getContributionAmount());
         goal.setRoundToNextEuro(goalVO.getRoundToNextEuro());
-        BigDecimal percentage = (goalVO.getContributionAmount().divide(goalVO.getTargetAmount())).multiply(new BigDecimal(100));
-        goal.setPercentageOfExpense(percentage);
+        //BigDecimal percentage = (goalVO.getContributionAmount().divide(goalVO.getTargetAmount())).multiply(new BigDecimal(100));
+        //goal.setPercentageOfExpense(percentage);
         goal.setCategoryOfExpense(goalVO.getCategoryOfExpense());
         return goal;
     }
@@ -122,9 +122,9 @@ public class GoalsController {
     public HttpResponse<Goal> updateGoal(@RequestBody GoalVO goal) {
         HttpResponse<Goal> httpResponse = new HttpResponse<>();
         logger.info("Updating Goals object");
-            Goal goalObj = new Goal();
+        Goal goalObj = new Goal();
         try {
-           // goalObj = goalDao.findById(goal.getGoalId()).get();
+            // goalObj = goalDao.findById(goal.getGoalId()).get();
             goalObj.setGoalId(goal.getGoalId());
             goalObj.setAccountId(goal.getAccountId());
             goalObj.setUserId(goal.getUserId());
