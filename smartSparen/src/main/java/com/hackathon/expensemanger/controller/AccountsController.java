@@ -2,6 +2,7 @@ package com.hackathon.expensemanger.controller;
 
 import com.hackathon.expensemanger.dao.AccountsDao;
 import com.hackathon.expensemanger.entity.Accounts;
+import com.hackathon.expensemanger.entity.Users;
 import com.hackathon.expensemanger.util.HttpResponse;
 import jakarta.persistence.TemporalType;
 import org.slf4j.Logger;
@@ -81,5 +82,12 @@ public class AccountsController {
             httpResponse.setMessage(MSG_FOR_FAILED_INSERTION);
         }
         return httpResponse;
+    }
+
+    @GetMapping("/getUsersAccount")
+    public Integer getUsersAccount(@RequestParam Long userId) {
+        Optional<Accounts> accounts = null;
+        accounts = accountsDao.findById(userId);
+        return accounts.get().getAccountId();
     }
 }

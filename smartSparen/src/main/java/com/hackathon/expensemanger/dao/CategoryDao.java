@@ -48,5 +48,10 @@ public interface CategoryDao extends JpaRepository<Category, Long> {
             ") AS sub ORDER BY user_id,category_name, month_start", nativeQuery = true)
     public List findByCategoryMonthlyData();
 
+    @Query(name = "Category.findByCategoryName", value = "Select * from Category c where c.category_name = :categoryName" , nativeQuery = true)
+    public int findByCategoryName(String categoryName);
+    @Query(name = "Category.getCategoryNameById", value = "Select c.category_name from Category c where c.category_id = :id" , nativeQuery = true)
+    public String getCategoryNameById(Integer id);
+
 
 }

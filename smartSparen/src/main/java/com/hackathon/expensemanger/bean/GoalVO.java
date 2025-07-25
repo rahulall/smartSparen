@@ -1,16 +1,13 @@
 package com.hackathon.expensemanger.bean;
 
-import jakarta.persistence.Column;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
-public class Goal {
+public class GoalVO {
 
     private Integer goalId;
     private Integer userId;
