@@ -26,4 +26,7 @@ public interface ExpensesDao extends JpaRepository<Expenses, Long> {
             "Users u ON u.userId=e.userId JOIN " +
             "Category c ON c.categoryId=e.categoryId WHERE e.transactionDate BETWEEN ?1 AND ?2 ", nativeQuery = false)
     public List<CategoryExpenseDto> findAllData(Date startDate, Date endDate);
+
+    @Query(name = "Expenses.findExpensesByCategoryId", value = "Select distinct(ex.*) from Expenses ex where ex.category_id = :categoryId" , nativeQuery = true)
+    public Expenses findExpensesByCategoryId(Integer categoryId);
 }

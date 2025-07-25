@@ -1,10 +1,14 @@
 package com.hackathon.expensemanger.controller;
 
-import com.hackathon.expensemanger.dao.CategoryDao;
+import com.hackathon.expensemanger.dao.AccountsDao;
 import com.hackathon.expensemanger.dao.ExpensesDao;
+import com.hackathon.expensemanger.dao.GoalDao;
+import com.hackathon.expensemanger.dao.TransactionDao;
 import com.hackathon.expensemanger.dto.CategoryExpenseDto;
-import com.hackathon.expensemanger.entity.Category;
+import com.hackathon.expensemanger.entity.Accounts;
 import com.hackathon.expensemanger.entity.Expenses;
+import com.hackathon.expensemanger.entity.Goal;
+import com.hackathon.expensemanger.entity.GoalTransaction;
 import com.hackathon.expensemanger.util.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,15 +35,21 @@ public class ExpensesController {
     private ExpensesDao expensesDao;
 
     @Autowired
-    private CategoryDao categoryDao;
+    private GoalDao goalDao;
+
+    @Autowired
+    private AccountsDao accountsDao;
+
+    @Autowired
+    private TransactionDao transactionDao;
 
     @PostMapping("/expenses")
     public HttpResponse insertExpenses(@RequestBody Expenses expenses) {
         HttpResponse<Expenses> httpResponse = new HttpResponse();
         logger.info("Adding Expenses object");
         try {
-
             expensesDao.save(expenses);
+            updateBalance(expenses);
             httpResponse.setStatus(SUCCESS);
             httpResponse.setMessage(MSG_FOR_SUCCESSFUL_INSERTION);
             httpResponse.setObject(expenses);
@@ -77,6 +88,21 @@ public class ExpensesController {
             httpResponse.setStatus(MSG_FOR_FAILURE_GET_CATEGORY_WISE_RETRIEVAL);
         }
         return httpResponse;
+    }
+
+    public void updateBalance(Expenses expense){
+        Goal goal = new Goal();
+        Accounts accounts = new Accounts();
+        goal = goalDao.findById(expense.getCategoryId()).get();
+        BigDecimal fixedPercentAmount = (goal.getPercentageOfExpense().divide(expense.getAmount())).multiply(new BigDecimal(100));
+        accounts = accountsDao.getAccountsByUserId(goal.getUserId());
+        GoalTransaction transaction = transactionDao.findById(goal.getGoalId().longValue()).get();
+        transaction.setTransactionAmount(expense.getAmount());
+        transaction.setTransactionGoalAmount(fixedPercentAmount);
+        transactionDao.save(transaction);
+        BigDecimal accountBalance = accounts.getBalance().subtract(goal.getPercentageOfExpense());
+        accounts.setBalance(accountBalance);
+        accountsDao.save(accounts);
     }
 
 }

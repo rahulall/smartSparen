@@ -26,18 +26,19 @@ public class TransactionController {
     @PostMapping("/transaction")
     public HttpResponse insertTransaction(@RequestBody GoalTransaction goalTransaction) {
         HttpResponse<GoalTransaction> httpResponse = new HttpResponse();
-        logger.info("Adding Accounts object");
+        logger.info("Adding Transaction object");
         try {
             transactionDao.save(goalTransaction);
             httpResponse.setStatus(SUCCESS);
             httpResponse.setMessage(MSG_FOR_SUCCESSFUL_INSERTION);
             httpResponse.setObject(goalTransaction);
-            logger.info("End of method adding accounts");
+            logger.info("End of method adding transaction");
         } catch (Exception e) {
-            logger.error("exception occurred while inserting accounts : ", e);
+            logger.error("exception occurred while inserting transaction : ", e);
             httpResponse.setStatus(FAILURE);
             httpResponse.setMessage(MSG_FOR_FAILED_INSERTION);
         }
         return httpResponse;
     }
+
 }

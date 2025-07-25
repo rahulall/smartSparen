@@ -2,7 +2,9 @@ package com.hackathon.expensemanger.controller;
 
 import com.hackathon.expensemanger.dao.AccountsDao;
 import com.hackathon.expensemanger.dao.CategoryDao;
+import com.hackathon.expensemanger.dao.ExpensesDao;
 import com.hackathon.expensemanger.dao.GoalDao;
+import com.hackathon.expensemanger.entity.Expenses;
 import com.hackathon.expensemanger.entity.Goal;
 import com.hackathon.expensemanger.bean.GoalVO;
 import com.hackathon.expensemanger.util.HttpResponse;
@@ -29,6 +31,8 @@ public class GoalsController {
     private AccountsDao accountsDao;
     @Autowired
     private CategoryDao categoryDao;
+    @Autowired
+    private ExpensesDao expensesDao;
 
     @GetMapping("/fetchGoals")
     public List<Goal> fetchGoal(@RequestParam Integer userId){
@@ -69,8 +73,8 @@ public class GoalsController {
         goalVO.setDateOfMonth(goal.getDateOfMonth());
         goalVO.setContributionAmount(goal.getContributionAmount());
         goalVO.setRoundToNextEuro(goal.getRoundToNextEuro());
-        BigDecimal percentage = (goal.getContributionAmount().divide(goal.getTargetAmount())).multiply(new BigDecimal(100));
-        goalVO.setPercentageOfExpense(percentage);
+        //BigDecimal percentage = (goal.getContributionAmount().divide(goal.getTargetAmount())).multiply(new BigDecimal(100));
+        goalVO.setPercentageOfExpense(goal.getPercentageOfExpense());
         return goalVO;
     }
     @PostMapping("/insertGoal")
@@ -106,16 +110,25 @@ public class GoalsController {
         goal.setGoalStartDate(goalVO.getGoalStartDate());
         goal.setGoalEndDate(goalVO.getGoalEndDate());
         goal.setGoalStatus(goalVO.getGoalStatus());
-        goal.setFrequencyOfContribution(goalVO.getFrequencyOfContribution());
-        goal.setContributionStyle(goalVO.getContributionStyle());
-        goal.setDayOfWeek(goalVO.getDayOfWeek());
-        goal.setDateOfMonth(goalVO.getDateOfMonth());
-        goal.setContributionAmount(goalVO.getContributionAmount());
-        goal.setRoundToNextEuro(goalVO.getRoundToNextEuro());
-        //BigDecimal percentage = (goalVO.getContributionAmount().divide(goalVO.getTargetAmount())).multiply(new BigDecimal(100));
-        //goal.setPercentageOfExpense(percentage);
+        if("PERIODIC".equals(goalVO.getContributionStyle())){
+            goal.setContributionStyle(goalVO.getContributionStyle());
+            goal.setFrequencyOfContribution(goalVO.getFrequencyOfContribution());
+            goal.setDayOfWeek(goalVO.getDayOfWeek());
+            goal.setDateOfMonth(goalVO.getDateOfMonth());
+            goal.setContributionAmount(goalVO.getContributionAmount());
+        }else if("Round-Off".equals(goalVO.getContributionStyle())){
+            goal.setContributionStyle(goalVO.getContributionStyle());
+            goal.setRoundToNextEuro(goal.getRoundToNextEuro());
+            calculateRoundOffAmount(goalVO);
+        }else if("Fixed %".equals(goalVO.getContributionStyle())) {
+            goal.setPercentageOfExpense(goalVO.getPercentageOfExpense());
+        }
         goal.setCategoryOfExpense(goalVO.getCategoryOfExpense());
         return goal;
+    }
+
+    private void calculateRoundOffAmount(GoalVO goalVO){
+
     }
 
     @PostMapping("/updateGoal")
@@ -134,12 +147,16 @@ public class GoalsController {
             //goalObj.setGoalStartDate(goal.getGoalStartDate());
             goalObj.setGoalEndDate(goal.getGoalEndDate());
             goalObj.setGoalStatus(goal.getGoalStatus());
-            goalObj.setFrequencyOfContribution(goal.getFrequencyOfContribution());
-            goalObj.setContributionStyle(goal.getContributionStyle());
-            goalObj.setDayOfWeek(goal.getDayOfWeek());
-            goalObj.setDateOfMonth(goal.getDateOfMonth());
-            goalObj.setContributionAmount(goal.getContributionAmount());
-            //goalObj.setRoundToNextEuro(goal.getRoundToNextEuro());
+            if("PERIODIC".equals(goal.getContributionStyle())){
+                goalObj.setContributionStyle(goal.getContributionStyle());
+                goalObj.setFrequencyOfContribution(goal.getFrequencyOfContribution());
+                goalObj.setDayOfWeek(goal.getDayOfWeek());
+                goalObj.setDateOfMonth(goal.getDateOfMonth());
+                goalObj.setContributionAmount(goal.getContributionAmount());
+            }else{
+                goalObj.setContributionStyle("Round-Off");
+                goalObj.setRoundToNextEuro(goal.getRoundToNextEuro());
+            }
             goalObj.setPercentageOfExpense(goal.getPercentageOfExpense());
             //goal.setModifiedAt();
             goalDao.save(goalObj);
